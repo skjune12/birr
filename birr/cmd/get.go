@@ -15,48 +15,36 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
-	"log"
 
-	"github.com/skjune12/birr/api"
 	"github.com/spf13/cobra"
-	"google.golang.org/grpc"
 )
 
-// pingCmd represents the ping command
-var pingCmd = &cobra.Command{
-	Use:   "ping",
-	Short: "Check the connectivity to birrd.",
+// getCmd represents the get command
+var getCmd = &cobra.Command{
+	Use:   "get",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ping called")
-
-		conn, err := grpc.Dial(":7777", grpc.WithInsecure())
-		if err != nil {
-			log.Fatalf("grpc.Dial: %s\n", err)
-		}
-		defer conn.Close()
-
-		c := api.NewBirrClient(conn)
-
-		response, err := c.Ping(context.Background(), &api.PingMessage{Ping: "Ping"})
-		if err != nil {
-			log.Fatalf("Error when calling Ping: %s\n", err)
-		}
-		log.Printf("Response from server: %s", response.Ping)
+		fmt.Println("get called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(pingCmd)
+	rootCmd.AddCommand(getCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// pingCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// getCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// pingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// getCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

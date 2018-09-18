@@ -1,10 +1,20 @@
 syntax = "proto3";
 package api;
 
-service Ping {
-  rpc SayHello(PingMessage) returns (PingMessage) {}
+service Birr {
+  rpc Ping(PingMessage) returns (PingMessage);
+  rpc AddFile(AddFileMessage) returns (HashValue);
 }
 
 message PingMessage {
   string ping = 1;
+}
+
+message AddFileMessage {
+  string filename = 1;
+}
+
+message HashValue {
+  string filename = 1;
+  string hash = 2;
 }

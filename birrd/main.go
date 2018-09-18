@@ -22,11 +22,11 @@ func main() {
 	// create a gRPC server object
 	grpcServer := grpc.NewServer()
 
-	// attach the Ping service to the server
-	api.RegisterPingServer(grpcServer, &s)
+	// attach the Birr service to the server
+	api.RegisterBirrServer(grpcServer, &s)
 
 	// start the server
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %s", err)
+		log.Fatalf("Failed to serve: %s", err)
 	}
 }

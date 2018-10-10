@@ -4,6 +4,7 @@ package api;
 service Birr {
   rpc Ping(PingMessage) returns (PingMessage);
   rpc AddFile(AddFileMessage) returns (HashValue);
+  rpc GetFile(GetFileMessage) returns (ContentMessage);
 }
 
 message PingMessage {
@@ -17,4 +18,13 @@ message AddFileMessage {
 message HashValue {
   string filename = 1;
   string hash = 2;
+}
+
+message GetFileMessage {
+  string hash = 1;
+}
+
+message ContentMessage {
+  string hash = 1;
+  string content = 2;
 }

@@ -41,3 +41,18 @@ func (s *Server) AddFile(ctx context.Context, in *AddFileMessage) (*HashValue, e
 
 	return &HashValue{Filename: in.Filename, Hash: cid}, nil
 }
+
+func (s *Server) GetFile(ctx context.Context, in *GetFileMessage) (*ContentMessage, error) {
+	log.Printf("Receive GetFile %s\n", in.Hash)
+
+	sh := shell.NewShell("localhost:5001")
+
+	obj, err := sh.ObjectGet(in.Hash)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println(obj)
+
+	return &ContentMessage{Hash: in.Hash, Content: obj.Data}, nil
+}

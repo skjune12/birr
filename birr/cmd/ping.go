@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/skjune12/birr/api"
@@ -29,8 +28,6 @@ var pingCmd = &cobra.Command{
 	Use:   "ping",
 	Short: "Check the connectivity to birrd.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("ping called")
-
 		conn, err := grpc.Dial(":7777", grpc.WithInsecure())
 		if err != nil {
 			log.Fatalf("grpc.Dial: %s\n", err)

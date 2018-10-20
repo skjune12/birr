@@ -30,7 +30,6 @@ var getCmd = &cobra.Command{
 	Use:   "get",
 	Short: "Get the content from IPFS Hash value.",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("get called")
 		if len(os.Args) != 3 {
 			fmt.Printf("usage: %s %s `IPFS_HASH`\n", os.Args[0], os.Args[1])
 			os.Exit(0)
@@ -50,7 +49,8 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalf("Error when calling GetFile: %s\n", err)
 		}
-		log.Printf("Response from server: %s %s", response.Hash, response.Content)
+
+		fmt.Printf("Response from server\nHash: %s\nContent: %s", response.Hash, response.Content)
 	},
 }
 

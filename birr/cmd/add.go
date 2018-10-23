@@ -42,7 +42,8 @@ var addCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		conn, err := grpc.Dial(":7777", grpc.WithInsecure())
+		address := fmt.Sprintf("%s:%s", cfg.Client.Host, cfg.Client.Port)
+		conn, err := grpc.Dial(address, grpc.WithInsecure())
 		if err != nil {
 			log.Fatalf("grpc.Dial: %s\n", err)
 		}

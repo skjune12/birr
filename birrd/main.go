@@ -1,16 +1,44 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
+	"os"
 
 	"github.com/skjune12/birr/api"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
 )
 
+type Config struct {
+	Daemon DaemonConfig `mapstructure:"daemon"`
+}
+
+type DaemonConfig struct {
+	Host string `mapstructure:"host"`
+	Port string `mapstructure:"port"`
+}
+
 func main() {
+	viper := viper.New()
+	viper.SetConfigName("birr")
+	viper.AddConfigPath("$GOPATH/src/github.com/skjune12/birr/")
+
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Println("Couldn't load config:", err)
+		os.Exit(1)
+	}
+
+	var config Config
+	if err := viper.Unmarshal(&config); err != nil {
+		fmt.Println("Couldn't load config:", err)
+		os.Exit(1)
+	}
+
 	// create a listener on TCP port 7777
-	lis, err := net.Listen("tcp", ":7777")
+	address := fmt.Sprintf("%s:%s", config.Daemon.Host, config.Daemon.Port)
+	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatal(err)
 	}

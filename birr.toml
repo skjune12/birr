@@ -1,0 +1,7 @@
+[daemon]
+host = "localhost"
+port = "7777"
+
+[client]
+host = "localhost"
+port = "7777"

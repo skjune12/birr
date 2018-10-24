@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math/big"
-	"os"
-	"os/exec"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
@@ -13,36 +11,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
-func setupContract() error {
-	if err := os.RemoveAll("SimpleStorage"); err != nil {
-		return err
-	}
-
-	// ABIおよびbinの作成
-	fmt.Println("solc SimpleStorage.sol --abi --bin -o SimpleStorage")
-	out, err := exec.Command("solc", "SimpleStorage.sol", "--abi", "--bin", "-o", "SimpleStorage").Output()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, out)
-		return err
-	}
-
-	// contract.go の生成
-	fmt.Println("abigen --sol=SimpleStorage.sol --pkg=main --out=contract.go")
-	out, err = exec.Command("abigen", "--sol=SimpleStorage.sol", "--pkg=main", "--out=contract.go").Output()
-	if err != nil {
-		fmt.Fprintln(os.Stderr, out)
-		return err
-	}
-
-	return nil
-}
-
 func main() {
-	err := setupContract()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	// create a key and make a genesis account with a bunch of ether
 	key, _ := crypto.GenerateKey()
 	auth := bind.NewKeyedTransactor(key)

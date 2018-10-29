@@ -1,7 +1,7 @@
 SOLC     = solc
 ABIGEN   = abigen
-CONTRACT = SimpleStorage
-MAIN		 = main.go
+CONTRACT = BirrContract
+MAIN     = main.go
 
 .PHONY: solc
 solc: $(CONTRACT).sol
@@ -9,7 +9,7 @@ solc: $(CONTRACT).sol
 
 .PHONY: abigen
 abigen: $(CONTRACT).sol
-	abigen --sol=SimpleStorage.sol --pkg=main --out=contract.go
+	abigen --sol=$(CONTRACT).sol --pkg=main --out=contract.go
 
 .PHONY: build
 build: abigen
@@ -18,3 +18,7 @@ build: abigen
 .PHONY: run
 run: abigen
 	go run main.go contract.go
+
+.PHONY: clean
+clean:
+	rm -rf $(CONTRACT)

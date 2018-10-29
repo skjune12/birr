@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-contract SimpleStorage {
+contract BirrContract {
   string public storedData;
 
   constructor() public {
@@ -8,7 +8,6 @@ contract SimpleStorage {
     storedData = "init";
   }
 
-  // payableをつけると中身のデータを書き換えられるようになった
   function set(string x) public payable {
     storedData = x;
   }

@@ -24,7 +24,7 @@ func main() {
 	sim := backends.NewSimulatedBackend(alloc, uint64(133700000))
 
 	// Deploy Contract
-	addr, _, contract, err := DeploySimpleStorage(auth, sim)
+	addr, _, contract, err := DeployBirrContract(auth, sim)
 	if err != nil {
 		log.Fatalf("Could not deploy contract: %v", err)
 	}

@@ -9,7 +9,7 @@ solc: $(CONTRACT).sol
 
 .PHONY: abigen
 abigen: $(CONTRACT).sol
-	abigen --sol=$(CONTRACT).sol --pkg=main --out=contract.go
+	abigen --sol $(CONTRACT).sol --pkg main --out contract.go
 
 .PHONY: build
 build: abigen
@@ -22,3 +22,4 @@ run: abigen
 .PHONY: clean
 clean:
 	rm -rf $(CONTRACT)
+	rm -rf contract.go

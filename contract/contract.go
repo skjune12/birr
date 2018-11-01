@@ -4,6 +4,7 @@
 package main
 
 import (
+	"math/big"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -13,18 +14,18 @@ import (
 )
 
 // BirrContractABI is the input ABI used to generate the binding from.
-const BirrContractABI = "[{\"constant\":true,\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"x\",\"type\":\"string\"}],\"name\":\"set\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
+const BirrContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"ownerAddresses\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getObjects\",\"outputs\":[{\"name\":\"\",\"type\":\"uint32\"},{\"name\":\"\",\"type\":\"string\"},{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"i\",\"type\":\"uint32\"}],\"name\":\"getOwner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"address\"}],\"name\":\"objects\",\"outputs\":[{\"name\":\"owner\",\"type\":\"address\"},{\"name\":\"asNumber\",\"type\":\"uint32\"},{\"name\":\"hash\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getHowManyOwners\",\"outputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"asNumber\",\"type\":\"uint32\"},{\"name\":\"ipfsHash\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}]"
 
 // BirrContractBin is the compiled bytecode used for deploying new contracts.
-const BirrContractBin = `0x608060405234801561001057600080fd5b506040805180820190915260048082527f696e69740000000000000000000000000000000000000000000000000000000060209092019182526100559160009161005b565b506100f6565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061009c57805160ff19168380011785556100c9565b828001600101855582156100c9579182015b828111156100c95782518255916020019190600101906100ae565b506100d59291506100d9565b5090565b6100f391905b808211156100d557600081556001016100df565b90565b610294806101056000396000f30060806040526004361061004b5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416632a1afcd981146100505780634ed3885e146100da575b600080fd5b34801561005c57600080fd5b50610065610128565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561009f578181015183820152602001610087565b50505050905090810190601f1680156100cc5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6040805160206004803580820135601f81018490048402850184019095528484526101269436949293602493928401919081908401838280828437509497506101b69650505050505050565b005b6000805460408051602060026001851615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156101ae5780601f10610183576101008083540402835291602001916101ae565b820191906000526020600020905b81548152906001019060200180831161019157829003601f168201915b505050505081565b80516101c99060009060208401906101cd565b5050565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061020e57805160ff191683800117855561023b565b8280016001018555821561023b579182015b8281111561023b578251825591602001919060010190610220565b5061024792915061024b565b5090565b61026591905b808211156102475760008155600101610251565b905600a165627a7a723058201b03c430a53848d38867a4c4756adf6b34e08dac5a08dd177bf93815b2e1b75b0029`
+const BirrContractBin = `0x608060405234801561001057600080fd5b506040516105e03803806105e08339810160409081528151602080840151336000818152808452949094208054600160a060020a03191690941760a060020a60c060020a0319167401000000000000000000000000000000000000000063ffffffff851602178455909301805191939092610093926001909101918401906100dc565b50506001805480820182556000919091527fb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6018054600160a060020a0319163317905550610177565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f1061011d57805160ff191683800117855561014a565b8280016001018555821561014a579182015b8281111561014a57825182559160200191906001019061012f565b5061015692915061015a565b5090565b61017491905b808211156101565760008155600101610160565b90565b61045a806101866000396000f30060806040526004361061006c5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630f310b1781146100715780631665ff7c146100a5578063621b23e214610150578063770285ae1461016e578063a2b71511146101f5575b600080fd5b34801561007d57600080fd5b5061008960043561021c565b60408051600160a060020a039092168252519081900360200190f35b3480156100b157600080fd5b506100ba610244565b6040805163ffffffff85168152600160a060020a03831691810191909152606060208083018281528551928401929092528451608084019186019080838360005b838110156101135781810151838201526020016100fb565b50505050905090810190601f1680156101405780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561015c57600080fd5b5061008963ffffffff60043516610325565b34801561017a57600080fd5b5061018f600160a060020a0360043516610357565b6040518084600160a060020a0316600160a060020a031681526020018363ffffffff1663ffffffff1681526020018060200182810382528381815181526020019150805190602001908083836000838110156101135781810151838201526020016100fb565b34801561020157600080fd5b5061020a610428565b60408051918252519081900360200190f35b600180548290811061022a57fe5b600091825260209091200154600160a060020a0316905081565b336000818152602081815260408083208054600191820180548451600261010095831615959095026000190190911693909304601f810186900486028401860190945283835294956060958795919474010000000000000000000000000000000000000000840463ffffffff16949193600160a060020a0316928491908301828280156103125780601f106102e757610100808354040283529160200191610312565b820191906000526020600020905b8154815290600101906020018083116102f557829003601f168201915b5050505050915093509350935050909192565b600060018263ffffffff1681548110151561033c57fe5b600091825260209091200154600160a060020a031692915050565b600060208181529181526040908190208054600180830180548551600261010094831615949094026000190190911692909204601f8101879004870283018701909552848252600160a060020a038316957401000000000000000000000000000000000000000090930463ffffffff1694919290919083018282801561041e5780601f106103f35761010080835404028352916020019161041e565b820191906000526020600020905b81548152906001019060200180831161040157829003601f168201915b5050505050905083565b600154905600a165627a7a7230582076ca6ac850cb713dcd34192e8e5b1cf1fb2317052e8b134ea46886cac3112df40029`
 
 // DeployBirrContract deploys a new Ethereum contract, binding an instance of BirrContract to it.
-func DeployBirrContract(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *BirrContract, error) {
+func DeployBirrContract(auth *bind.TransactOpts, backend bind.ContractBackend, asNumber uint32, ipfsHash string) (common.Address, *types.Transaction, *BirrContract, error) {
 	parsed, err := abi.JSON(strings.NewReader(BirrContractABI))
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
-	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(BirrContractBin), backend)
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(BirrContractBin), backend, asNumber, ipfsHash)
 	if err != nil {
 		return common.Address{}, nil, nil, err
 	}
@@ -173,49 +174,152 @@ func (_BirrContract *BirrContractTransactorRaw) Transact(opts *bind.TransactOpts
 	return _BirrContract.Contract.contract.Transact(opts, method, params...)
 }
 
-// StoredData is a free data retrieval call binding the contract method 0x2a1afcd9.
+// GetHowManyOwners is a free data retrieval call binding the contract method 0xa2b71511.
 //
-// Solidity: function storedData() constant returns(string)
-func (_BirrContract *BirrContractCaller) StoredData(opts *bind.CallOpts) (string, error) {
+// Solidity: function getHowManyOwners() constant returns(uint256)
+func (_BirrContract *BirrContractCaller) GetHowManyOwners(opts *bind.CallOpts) (*big.Int, error) {
 	var (
-		ret0 = new(string)
+		ret0 = new(*big.Int)
 	)
 	out := ret0
-	err := _BirrContract.contract.Call(opts, out, "storedData")
+	err := _BirrContract.contract.Call(opts, out, "getHowManyOwners")
 	return *ret0, err
 }
 
-// StoredData is a free data retrieval call binding the contract method 0x2a1afcd9.
+// GetHowManyOwners is a free data retrieval call binding the contract method 0xa2b71511.
 //
-// Solidity: function storedData() constant returns(string)
-func (_BirrContract *BirrContractSession) StoredData() (string, error) {
-	return _BirrContract.Contract.StoredData(&_BirrContract.CallOpts)
+// Solidity: function getHowManyOwners() constant returns(uint256)
+func (_BirrContract *BirrContractSession) GetHowManyOwners() (*big.Int, error) {
+	return _BirrContract.Contract.GetHowManyOwners(&_BirrContract.CallOpts)
 }
 
-// StoredData is a free data retrieval call binding the contract method 0x2a1afcd9.
+// GetHowManyOwners is a free data retrieval call binding the contract method 0xa2b71511.
 //
-// Solidity: function storedData() constant returns(string)
-func (_BirrContract *BirrContractCallerSession) StoredData() (string, error) {
-	return _BirrContract.Contract.StoredData(&_BirrContract.CallOpts)
+// Solidity: function getHowManyOwners() constant returns(uint256)
+func (_BirrContract *BirrContractCallerSession) GetHowManyOwners() (*big.Int, error) {
+	return _BirrContract.Contract.GetHowManyOwners(&_BirrContract.CallOpts)
 }
 
-// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
+// GetObjects is a free data retrieval call binding the contract method 0x1665ff7c.
 //
-// Solidity: function set(x string) returns()
-func (_BirrContract *BirrContractTransactor) Set(opts *bind.TransactOpts, x string) (*types.Transaction, error) {
-	return _BirrContract.contract.Transact(opts, "set", x)
+// Solidity: function getObjects() constant returns(uint32, string, address)
+func (_BirrContract *BirrContractCaller) GetObjects(opts *bind.CallOpts) (uint32, string, common.Address, error) {
+	var (
+		ret0 = new(uint32)
+		ret1 = new(string)
+		ret2 = new(common.Address)
+	)
+	out := &[]interface{}{
+		ret0,
+		ret1,
+		ret2,
+	}
+	err := _BirrContract.contract.Call(opts, out, "getObjects")
+	return *ret0, *ret1, *ret2, err
 }
 
-// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
+// GetObjects is a free data retrieval call binding the contract method 0x1665ff7c.
 //
-// Solidity: function set(x string) returns()
-func (_BirrContract *BirrContractSession) Set(x string) (*types.Transaction, error) {
-	return _BirrContract.Contract.Set(&_BirrContract.TransactOpts, x)
+// Solidity: function getObjects() constant returns(uint32, string, address)
+func (_BirrContract *BirrContractSession) GetObjects() (uint32, string, common.Address, error) {
+	return _BirrContract.Contract.GetObjects(&_BirrContract.CallOpts)
 }
 
-// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
+// GetObjects is a free data retrieval call binding the contract method 0x1665ff7c.
 //
-// Solidity: function set(x string) returns()
-func (_BirrContract *BirrContractTransactorSession) Set(x string) (*types.Transaction, error) {
-	return _BirrContract.Contract.Set(&_BirrContract.TransactOpts, x)
+// Solidity: function getObjects() constant returns(uint32, string, address)
+func (_BirrContract *BirrContractCallerSession) GetObjects() (uint32, string, common.Address, error) {
+	return _BirrContract.Contract.GetObjects(&_BirrContract.CallOpts)
+}
+
+// GetOwner is a free data retrieval call binding the contract method 0x621b23e2.
+//
+// Solidity: function getOwner(i uint32) constant returns(address)
+func (_BirrContract *BirrContractCaller) GetOwner(opts *bind.CallOpts, i uint32) (common.Address, error) {
+	var (
+		ret0 = new(common.Address)
+	)
+	out := ret0
+	err := _BirrContract.contract.Call(opts, out, "getOwner", i)
+	return *ret0, err
+}
+
+// GetOwner is a free data retrieval call binding the contract method 0x621b23e2.
+//
+// Solidity: function getOwner(i uint32) constant returns(address)
+func (_BirrContract *BirrContractSession) GetOwner(i uint32) (common.Address, error) {
+	return _BirrContract.Contract.GetOwner(&_BirrContract.CallOpts, i)
+}
+
+// GetOwner is a free data retrieval call binding the contract method 0x621b23e2.
+//
+// Solidity: function getOwner(i uint32) constant returns(address)
+func (_BirrContract *BirrContractCallerSession) GetOwner(i uint32) (common.Address, error) {
+	return _BirrContract.Contract.GetOwner(&_BirrContract.CallOpts, i)
+}
+
+// Objects is a free data retrieval call binding the contract method 0x770285ae.
+//
+// Solidity: function objects( address) constant returns(owner address, asNumber uint32, hash string)
+func (_BirrContract *BirrContractCaller) Objects(opts *bind.CallOpts, arg0 common.Address) (struct {
+	Owner    common.Address
+	AsNumber uint32
+	Hash     string
+}, error) {
+	ret := new(struct {
+		Owner    common.Address
+		AsNumber uint32
+		Hash     string
+	})
+	out := ret
+	err := _BirrContract.contract.Call(opts, out, "objects", arg0)
+	return *ret, err
+}
+
+// Objects is a free data retrieval call binding the contract method 0x770285ae.
+//
+// Solidity: function objects( address) constant returns(owner address, asNumber uint32, hash string)
+func (_BirrContract *BirrContractSession) Objects(arg0 common.Address) (struct {
+	Owner    common.Address
+	AsNumber uint32
+	Hash     string
+}, error) {
+	return _BirrContract.Contract.Objects(&_BirrContract.CallOpts, arg0)
+}
+
+// Objects is a free data retrieval call binding the contract method 0x770285ae.
+//
+// Solidity: function objects( address) constant returns(owner address, asNumber uint32, hash string)
+func (_BirrContract *BirrContractCallerSession) Objects(arg0 common.Address) (struct {
+	Owner    common.Address
+	AsNumber uint32
+	Hash     string
+}, error) {
+	return _BirrContract.Contract.Objects(&_BirrContract.CallOpts, arg0)
+}
+
+// OwnerAddresses is a free data retrieval call binding the contract method 0x0f310b17.
+//
+// Solidity: function ownerAddresses( uint256) constant returns(address)
+func (_BirrContract *BirrContractCaller) OwnerAddresses(opts *bind.CallOpts, arg0 *big.Int) (common.Address, error) {
+	var (
+		ret0 = new(common.Address)
+	)
+	out := ret0
+	err := _BirrContract.contract.Call(opts, out, "ownerAddresses", arg0)
+	return *ret0, err
+}
+
+// OwnerAddresses is a free data retrieval call binding the contract method 0x0f310b17.
+//
+// Solidity: function ownerAddresses( uint256) constant returns(address)
+func (_BirrContract *BirrContractSession) OwnerAddresses(arg0 *big.Int) (common.Address, error) {
+	return _BirrContract.Contract.OwnerAddresses(&_BirrContract.CallOpts, arg0)
+}
+
+// OwnerAddresses is a free data retrieval call binding the contract method 0x0f310b17.
+//
+// Solidity: function ownerAddresses( uint256) constant returns(address)
+func (_BirrContract *BirrContractCallerSession) OwnerAddresses(arg0 *big.Int) (common.Address, error) {
+	return _BirrContract.Contract.OwnerAddresses(&_BirrContract.CallOpts, arg0)
 }

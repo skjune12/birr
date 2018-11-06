@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
 	shell "github.com/ipfs/go-ipfs-api"
+	"github.com/k0kubun/pp"
 )
 
 // Server represents the gRPC Server
@@ -25,10 +25,21 @@ func (s *Server) Ping(ctx context.Context, in *PingMessage) (*PingMessage, error
 func (s *Server) AddFile(ctx context.Context, in *AddFileMessage) (*HashValue, error) {
 	log.Printf("Receive message %s\n", in.Filename)
 
-	data, err := ioutil.ReadFile(in.Filename)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "ioutil.ReadFile:", err)
-		return &HashValue{Filename: in.Filename}, err
+	filename := in.Filename
+	data := in.Content
+	objectType := in.Type
+
+	pp.Println(filename, data)
+
+	switch objectType {
+	case "autnum":
+		fmt.Println("autnum")
+	case "route":
+		fmt.Println("route")
+	case "route6":
+		fmt.Println("route6")
+	case "asset":
+		fmt.Println("as-set")
 	}
 
 	sh := shell.NewShell("localhost:5001")

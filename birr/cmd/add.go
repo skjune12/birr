@@ -17,6 +17,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -31,15 +32,25 @@ var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add file to birrd",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(os.Args) != 3 {
-			fmt.Printf("usage: %s %s `filename`\n", os.Args[0], os.Args[1])
+		if len(os.Args) != 4 {
+			fmt.Printf("usage: %s %s TYPE `filename`\n\n", os.Args[0], os.Args[1])
+			fmt.Printf("where  TYPE := { autnum | route | route6 | asset }\n")
 			os.Exit(0)
 		}
 
-		filename, err := filepath.Abs(os.Args[2])
+		// load file
+		filename, err := filepath.Abs(os.Args[3])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
+		}
+
+		// open file
+		data, err := ioutil.ReadFile(filename)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "ioutil.ReadFile:", err)
+			os.Exit(1)
+			// return &HashValue{Filename: in.Filename}, err
 		}
 
 		address := fmt.Sprintf("%s:%s", cfg.Client.Host, cfg.Client.Port)
@@ -51,7 +62,20 @@ var addCmd = &cobra.Command{
 
 		c := api.NewBirrClient(conn)
 
-		response, err := c.AddFile(context.Background(), &api.AddFileMessage{Filename: filename})
+		objectType := os.Args[2]
+
+		switch os.Args[2] {
+		case "autnum":
+			fmt.Println("autnum")
+		case "route":
+			fmt.Println("route")
+		case "route6":
+			fmt.Println("route6")
+		case "asset":
+			fmt.Println("as-set")
+		}
+
+		response, err := c.AddFile(context.Background(), &api.AddFileMessage{Type: objectType, Filename: filename, Content: data})
 		if err != nil {
 			log.Fatalf("Error when calling AddFile: %s\n", err)
 		}

@@ -28,4 +28,4 @@ protoc:
 clean:
 	rm bin/birrd
 	rm bin/birr
-	rm api/api.pb.go
+#	rm api/api.pb.go

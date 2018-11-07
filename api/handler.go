@@ -11,6 +11,21 @@ import (
 	"github.com/k0kubun/pp"
 )
 
+// Owner represents owner object
+type Owner struct {
+	Address  string
+	AsNumber uint32
+	Objects  Object
+}
+
+// Object represents each routing object
+type Object struct {
+	AutNum string
+	AsSet  string
+	Route  string
+	Route6 string
+}
+
 // Server represents the gRPC Server
 type Server struct {
 }
@@ -34,12 +49,16 @@ func (s *Server) AddFile(ctx context.Context, in *AddFileMessage) (*HashValue, e
 	switch objectType {
 	case "autnum":
 		fmt.Println("autnum")
+		// HandleAutNum
 	case "route":
 		fmt.Println("route")
+		// HandleRoute
 	case "route6":
 		fmt.Println("route6")
+		// HandleRoute6
 	case "asset":
 		fmt.Println("as-set")
+		// HandleAsSet
 	}
 
 	sh := shell.NewShell("localhost:5001")
@@ -56,6 +75,7 @@ func (s *Server) AddFile(ctx context.Context, in *AddFileMessage) (*HashValue, e
 func (s *Server) GetFile(ctx context.Context, in *GetFileMessage) (*ContentMessage, error) {
 	log.Printf("Receive GetFile %s\n", in.Hash)
 
+	// TODO: Modity function to call from Ethereum Address, not IPFS HashValue.
 	sh := shell.NewShell("localhost:5001")
 
 	obj, err := sh.ObjectGet(in.Hash)

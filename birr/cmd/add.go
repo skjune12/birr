@@ -64,17 +64,6 @@ var addCmd = &cobra.Command{
 
 		objectType := os.Args[2]
 
-		switch os.Args[2] {
-		case "autnum":
-			fmt.Println("autnum")
-		case "route":
-			fmt.Println("route")
-		case "route6":
-			fmt.Println("route6")
-		case "asset":
-			fmt.Println("as-set")
-		}
-
 		response, err := c.AddFile(context.Background(), &api.AddFileMessage{Type: objectType, Filename: filename, Content: data})
 		if err != nil {
 			log.Fatalf("Error when calling AddFile: %s\n", err)

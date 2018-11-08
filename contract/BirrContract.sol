@@ -2,38 +2,54 @@ pragma solidity ^0.4.24;
 
 contract BirrContract {
 
+  bytes32 ipfsHash;
+
   struct Object {
-    address owner;      // Address of msg.sender
-    uint32 asNumber;    // asNumber
-    string hash;       // IPFS Hash
-
-    /* string[] ipv4;  // IPv4 Prefixes
-    string[] ipv6;  // IPv6 Prefixes */
+      uint32 asNumber;
+      bytes32 routeObj;
+      bytes32 route6Obj;
+      bytes32 autNumObj;
+      bytes32 asNumObj;
   }
 
-  mapping(address => Object) public objects;
+  mapping(address => Object) objects;
 
-  address[] public ownerAddresses;
-
-  constructor(uint32 asNumber, string ipfsHash) public {
-    objects[msg.sender].owner = msg.sender;
-    objects[msg.sender].asNumber = asNumber;
-    objects[msg.sender].hash = ipfsHash;
-
-    ownerAddresses.push(msg.sender);
+  function newObject(uint32 asNumber) public {
+      objects[msg.sender] = Object(asNumber, "", "", "", "");
   }
 
-  function getHowManyOwners() view public returns (uint) {
-    return ownerAddresses.length;
+  function getIpfsHash() public view returns (string) {
+      return bytes32ToString(ipfsHash);
   }
 
-  function getOwner(uint32 i) view public returns (address) {
-    return ownerAddresses[i];
+  function setIpfsHash(string x) public {
+      ipfsHash = stringToBytes32(x);
   }
 
-  function getObjects() view public returns (uint32, string, address) {
-    address addr = msg.sender;
+  function stringToBytes32(string memory source) private pure returns (bytes32 result) {
+      bytes memory tempEmptyStringTest = bytes(source);
+      if (tempEmptyStringTest.length == 0) {
+          return 0x0;
+      }
+      assembly {
+          result := mload(add(source, 32))
+      }
+  }
 
-    return (objects[addr].asNumber, objects[addr].hash, objects[addr].owner);
+  function bytes32ToString(bytes32 x) private pure returns (string) {
+      bytes memory bytesString = new bytes(32);
+      uint charCount = 0;
+      for (uint j = 0; j < 32; j++) {
+          byte char = byte(bytes32(uint(x) * 2 ** (8 * j)));
+          if (char != 0) {
+              bytesString[charCount] = char;
+              charCount++;
+          }
+      }
+      bytes memory bytesStringTrimmed = new bytes(charCount);
+      for (j = 0; j < charCount; j++) {
+          bytesStringTrimmed[j] = bytesString[j];
+      }
+      return string(bytesStringTrimmed);
   }
 }

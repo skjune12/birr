@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 contract BirrContract {
 
@@ -18,11 +18,11 @@ contract BirrContract {
       objects[msg.sender] = Object(asNumber, "", "", "", "");
   }
 
-  function getIpfsHash() public view returns (string) {
+  function getIpfsHash() public view returns (string memory) {
       return bytes32ToString(ipfsHash);
   }
 
-  function setIpfsHash(string x) public {
+  function setIpfsHash(string memory x) public {
       ipfsHash = stringToBytes32(x);
   }
 
@@ -36,10 +36,11 @@ contract BirrContract {
       }
   }
 
-  function bytes32ToString(bytes32 x) private pure returns (string) {
+  function bytes32ToString(bytes32 x) private pure returns (string memory) {
       bytes memory bytesString = new bytes(32);
       uint charCount = 0;
-      for (uint j = 0; j < 32; j++) {
+      uint j = 0;
+      for (j = 0; j < 32; j++) {
           byte char = byte(bytes32(uint(x) * 2 ** (8 * j)));
           if (char != 0) {
               bytesString[charCount] = char;
@@ -53,3 +54,5 @@ contract BirrContract {
       return string(bytesStringTrimmed);
   }
 }
+
+

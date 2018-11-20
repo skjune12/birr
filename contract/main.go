@@ -24,7 +24,7 @@ func main() {
 	sim := backends.NewSimulatedBackend(alloc, uint64(133700000))
 
 	// Deploy Contract
-	addr, _, contract, err := DeployBirrContract(auth, sim, 65000, "QmTE9Xp76E67vkYeygbKJrsVj8W2LLcyUifuMHMEkyRfUL")
+	addr, _, contract, err := DeployBirrContract(auth, sim)
 	if err != nil {
 		log.Fatalf("Could not deploy contract: %v", err)
 	}
@@ -34,17 +34,21 @@ func main() {
 	// verity the transaction
 	sim.Commit()
 
-	// コントラクト内部のデータの読み出し
-	data, _ := contract.GetHowManyOwners(nil)
-	fmt.Printf("Post-mining data: %v\n", data)
+	_ = contract
 
-	asn, hash, ownerAddr, _ := contract.GetObjects(nil)
-	fmt.Printf("Post-mining data: asn=%v hash=%v ownerAddr=%v\n", asn, hash, ownerAddr)
+	// NOTE: the example of reading from / writing to contract is below.
 
-	owner, _ := contract.GetOwner(nil, 1)
-	fmt.Printf("owner: %v\n", owner)
+	// read the data from contract
+	// data, _ := contract.GetHowManyOwners(nil)
+	// fmt.Printf("Post-mining data: %v\n", data)
+	//
+	// asn, hash, ownerAddr, _ := contract.GetObjects(nil)
+	// fmt.Printf("Post-mining data: asn=%v hash=%v ownerAddr=%v\n", asn, hash, ownerAddr)
+	//
+	// owner, _ := contract.GetOwner(nil, 1)
+	// fmt.Printf("owner: %v\n", owner)
 
-	// // コントラクトへのデータの書き込み
+	// write a data to contract
 	// fmt.Println("Adding new object...")
 	// contract.Set(&bind.TransactOpts{
 	// 	From:     auth.From,
@@ -53,11 +57,11 @@ func main() {
 	// 	Value:    big.NewInt(1000),
 	// }, "Hello")
 	//
-	// // マイニング
+	// mining
 	// fmt.Println("Mining...")
 	// sim.Commit()
 	//
-	// // コントラクト内部のデータの読み出し
+	// read the data from contract
 	// storedData, _ = contract.StoredData(nil)
 	// fmt.Printf("Post-mining Stored Data: %v\n", storedData)
 

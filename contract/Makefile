@@ -3,13 +3,16 @@ ABIGEN   = abigen
 CONTRACT = BirrContract
 MAIN     = main.go
 
+.PHONY: all
+all: abigen solc build
+
 .PHONY: solc
 solc: $(CONTRACT).sol
 	$(SOLC) $(CONTRACT).sol --abi --bin -o $(CONTRACT)
 
 .PHONY: abigen
 abigen: $(CONTRACT).sol
-	abigen --sol $(CONTRACT).sol --pkg main --out contract.go
+	abigen --sol $(CONTRACT).sol --pkg main --out $(CONTRACT).go
 
 .PHONY: build
 build: abigen
@@ -17,9 +20,9 @@ build: abigen
 
 .PHONY: run
 run: abigen
-	go run main.go contract.go
+	go run main.go $(CONTRACT).go
 
 .PHONY: clean
 clean:
 	rm -rf $(CONTRACT)
-	rm -rf contract.go
+	go clean

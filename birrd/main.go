@@ -20,7 +20,7 @@ type DaemonConfig struct {
 	Port string `mapstructure:"port"`
 }
 
-func main() {
+func LoadConfiguration() *Config {
 	viper := viper.New()
 	viper.SetConfigName("birr")
 	viper.AddConfigPath("$GOPATH/src/github.com/skjune12/birr/")
@@ -35,6 +35,12 @@ func main() {
 		fmt.Println("Couldn't load config:", err)
 		os.Exit(1)
 	}
+
+	return &config
+}
+
+func main() {
+	config := LoadConfiguration()
 
 	// create a listener on TCP port 7777
 	address := fmt.Sprintf("%s:%s", config.Daemon.Host, config.Daemon.Port)

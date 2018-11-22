@@ -61,7 +61,7 @@ func (s *Server) AddFile(ctx context.Context, in *AddFileMessage) (*HashValue, e
 		// HandleAsSet
 	}
 
-	sh := shell.NewShell("localhost:5001")
+	sh := shell.NewShell(Config.Daemon.Ipfs.Host)
 
 	cid, err := sh.Add(bytes.NewReader(data))
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *Server) GetFile(ctx context.Context, in *GetFileMessage) (*ContentMessa
 	log.Printf("Receive GetFile %s\n", in.Hash)
 
 	// TODO: Modity function to call from Ethereum Address, not IPFS HashValue.
-	sh := shell.NewShell("localhost:5001")
+	sh := shell.NewShell(Config.Daemon.Ipfs.Host)
 
 	obj, err := sh.ObjectGet(in.Hash)
 	if err != nil {

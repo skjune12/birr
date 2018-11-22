@@ -2,6 +2,12 @@
 host = "localhost"
 port = "7777"
 
+[daemon.ipfs]
+host = "https://ipfs-gateway.cloudflare.com"
+
+[daemon.ethereum]
+host = "https://infura.io/rinkeby"
+
 [client]
 host = "localhost"
 port = "7777"

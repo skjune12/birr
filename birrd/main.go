@@ -10,15 +10,12 @@ import (
 )
 
 func main() {
-	config := api.LoadConfiguration()
-
-	// create a listener on TCP port 7777
-	address := fmt.Sprintf("%s:%s", config.Daemon.Host, config.Daemon.Port)
+	address := fmt.Sprintf("%s:%s", api.Config.Daemon.Host, api.Config.Daemon.Port)
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Server listen on port :7777")
+	log.Printf("Server listen on port :%s\n", api.Config.Daemon.Port)
 
 	// create a server instance
 	s := api.Server{}

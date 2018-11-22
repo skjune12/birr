@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math/big"
-	"reflect"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
@@ -40,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(addrLen)
+	fmt.Println("addrLen =", addrLen)
 
 	sim.Commit()
 
@@ -58,12 +57,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(addrLen)
 
-	owner, _ := birrContract.AddressList(nil, big.NewInt(0))
-	log.Println(reflect.TypeOf(owner))
-	fmt.Println(owner.String())
+	for i := 0; i < int(addrLen.Int64()); i++ {
+		owner, err := birrContract.AddressList(nil, big.NewInt(int64(i)))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Account[%d]: %s\n", i, owner.String())
 
-	asNumber, _, _, _, _, err := birrContract.GetObject(nil, owner)
-	fmt.Println(asNumber)
+		asNumber, _, _, _, _, err := birrContract.GetObject(nil, owner)
+		fmt.Println("asNumber:", asNumber)
+	}
 }

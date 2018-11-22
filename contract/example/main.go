@@ -47,6 +47,43 @@ func main() {
 		From:   auth.From,
 		Signer: auth.Signer,
 	}, 2500)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = birrContract.SetRouteObj(&bind.TransactOpts{
+		From:   auth.From,
+		Signer: auth.Signer,
+	}, "routeObjExample")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = birrContract.SetRoute6Obj(&bind.TransactOpts{
+		From:   auth.From,
+		Signer: auth.Signer,
+	}, "route6ObjExample")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = birrContract.SetAutNumObj(&bind.TransactOpts{
+		From:   auth.From,
+		Signer: auth.Signer,
+	}, "autNumObj")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = birrContract.SetAsSetObj(&bind.TransactOpts{
+		From:   auth.From,
+		Signer: auth.Signer,
+	}, "routeObjExample")
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +102,11 @@ func main() {
 		}
 		fmt.Printf("Account[%d]: %s\n", i, owner.String())
 
-		asNumber, _, _, _, _, err := birrContract.GetObject(nil, owner)
+		asNumber, routeObj, route6Obj, autNumObj, asSetObj, err := birrContract.GetObject(nil, owner)
 		fmt.Println("asNumber:", asNumber)
+		fmt.Println("routeObj:", routeObj)
+		fmt.Println("route6Obj:", route6Obj)
+		fmt.Println("autNumObj:", autNumObj)
+		fmt.Println("asSetObj:", asSetObj)
 	}
 }

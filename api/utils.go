@@ -6,7 +6,6 @@ import (
 	"os"
 
 	shell "github.com/ipfs/go-ipfs-api"
-	"github.com/k0kubun/pp"
 	"github.com/spf13/viper"
 )
 
@@ -65,6 +64,5 @@ var Config *BIRRConfig
 func init() {
 	fmt.Fprintln(os.Stderr, "[INFO] Loading Configuration")
 	Config = LoadConfiguration()
-	pp.Println(Config)
 	fmt.Fprintln(os.Stderr, "[INFO] Finish loading configuration")
 }

@@ -51,14 +51,28 @@ func GetIPFSHashFromMultiHash(multihash *MultiHash) string {
 	return encoded
 }
 
-func showUsage() {
+// StringToBytes32 converts string to [32]bytes
+func StringToBytes32(str string) [32]byte {
+	bytes := [32]byte{}
+	copy(bytes[:], []byte(str))
+	return bytes
+}
+
+// Bytes32ToString converts [32]bytes to string
+func Bytes32ToString(bytes [32]byte) string {
+	return fmt.Sprintf("%s", bytes[:])
+}
+
+// ShowUsage shows how to use this script
+func ShowUsage() {
 	fmt.Fprintf(os.Stderr, "usage: %s TYPE\n\n", os.Args[0])
-	fmt.Fprintf(os.Stderr, "where  TYPE := { deploy | add | get | kill } COMMAND\n")
+	fmt.Fprintf(os.Stderr, "where  TYPE := { deploy | add | get | remove | kill } COMMAND\n")
 
 	os.Exit(1)
 }
 
-func readFile(filename string) ([]byte, error) {
+// ReadFile reads file from argument and returns its content
+func ReadFile(filename string) ([]byte, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

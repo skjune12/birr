@@ -25,7 +25,7 @@ const GasLimit uint = 4712388
 
 func main() {
 	if len(os.Args) < 2 {
-		showUsage()
+		ShowUsage()
 	}
 
 	// load .env
@@ -91,15 +91,16 @@ func main() {
 		// Add content to IPFS and write the IPFS hash to Smart Contract
 	case "add":
 		// Add to IPFS
-		if len(os.Args) < 4 {
-			fmt.Printf("Usage: %s %s { route | route6 | aut-num | as-set } FILENAME\n", os.Args[0], os.Args[1])
+		if len(os.Args) < 5 {
+			fmt.Printf("Usage: %s %s { route | route6 | aut-num | as-set } FILENAME KEY\n", os.Args[0], os.Args[1])
 			os.Exit(1)
 		}
 
 		objectType := os.Args[2]
 		filename := os.Args[3]
+		key := StringToBytes32(os.Args[4])
 
-		data, err := readFile(filename)
+		data, err := ReadFile(filename)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -159,7 +160,7 @@ func main() {
 
 		switch objectType {
 		case "route":
-			tx, err = instance.SetRoute(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+			tx, err = instance.SetRoute(auth, key, multihash.Digest, multihash.HashFunction, multihash.Size)
 		case "route6":
 			tx, err = instance.SetRoute6(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
 		case "aut-num":
@@ -177,15 +178,24 @@ func main() {
 
 		fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
 
-		// get the value from IPFS
+	// get the value from IPFS
 	case "get":
-		if len(os.Args) < 4 {
-			fmt.Printf("Usage: %s %s { route | route6 | aut-num | as-set } ACCOUNT_ADDRESS\n", os.Args[0], os.Args[1])
-			os.Exit(1)
+		if len(os.Args) < 5 {
+			if os.Args[2] != "routelist" {
+				fmt.Printf("Usage: %s %s { route | routelist | route6 | aut-num | as-set } ACCOUNT_ADDRESS KEY\n", os.Args[0], os.Args[1])
+				os.Exit(1)
+			}
 		}
 
 		objectType := os.Args[2]
-		accountAddr := os.Args[3]
+
+		var accountAddr string
+		var key [32]byte
+
+		if os.Args[2] != "routelist" {
+			accountAddr = os.Args[3]
+			key = StringToBytes32(os.Args[4])
+		}
 
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
 		instance, err := contract.NewStore(address, client)
@@ -201,7 +211,17 @@ func main() {
 
 		switch objectType {
 		case "route":
-			item, err = instance.GetRoute(nil, common.HexToAddress(accountAddr))
+			item, err = instance.GetRoute(nil, common.HexToAddress(accountAddr), key)
+		case "routelist":
+			// NOTE: does not work but works fine in remix
+			keys, err := instance.GetRouteKeys(nil)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			fmt.Printf("%#v", keys)
+			return
+
 		case "route6":
 			item, err = instance.GetRoute6(nil, common.HexToAddress(accountAddr))
 		case "aut-num":
@@ -233,6 +253,73 @@ func main() {
 
 		fmt.Printf(obj.Data)
 
+	// remove
+	case "remove":
+		if len(os.Args) < 4 {
+			fmt.Printf("Usage: %s %s { route | route6 | aut-num | as-set } KEY\n", os.Args[0], os.Args[1])
+			os.Exit(1)
+		}
+
+		objectType := os.Args[2]
+		key := StringToBytes32(os.Args[3])
+
+		// Exec contract
+		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		publicKey := privateKey.Public()
+		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+		if !ok {
+			log.Fatal("error casting public ket to ECDSA")
+		}
+
+		fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+
+		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		gasPrice, err := client.SuggestGasPrice(context.Background())
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		auth := bind.NewKeyedTransactor(privateKey)
+
+		auth.Nonce = big.NewInt(int64(nonce))
+		auth.Value = big.NewInt(0)
+		auth.GasLimit = uint64(GasLimit)
+		auth.GasPrice = gasPrice
+
+		// contract address (string)
+		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
+		instance, err := contract.NewStore(address, client)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var tx *types.Transaction
+
+		switch objectType {
+		case "route":
+			tx, err = instance.RemoveRoute(auth, key)
+		case "route6":
+			fmt.Fprintf(os.Stderr, "Not implemented\n")
+		default:
+			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
+			os.Exit(1)
+		}
+
+		if err != nil {
+			log.Fatal("instance.RemoveObject", err)
+		}
+
+		fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
+
+	// destruct the contract
 	case "kill":
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
 		if err != nil {
@@ -280,6 +367,6 @@ func main() {
 		fmt.Printf("tx sent: %s\n", tx.Hash().Hex())
 
 	default:
-		showUsage()
+		ShowUsage()
 	}
 }

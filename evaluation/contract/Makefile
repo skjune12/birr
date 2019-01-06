@@ -1,6 +1,6 @@
 SOLC = solc
 ABIGEN = abigen
-CONTRACT = Store
+CONTRACT = BirrContract
 PKGNAME = contract
 
 .PHONY: all

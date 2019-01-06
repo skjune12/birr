@@ -1,6 +1,6 @@
 pragma solidity ^0.5.1;
 
-contract Store {
+contract BirrContract {
   address payable public owner;
   string public version;
 

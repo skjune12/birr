@@ -80,7 +80,7 @@ func main() {
 		auth.GasPrice = gasPrice
 
 		input := "1.0"
-		address, tx, _, err := contract.DeployStore(auth, client, input)
+		address, tx, _, err := contract.DeployBirrContract(auth, client, input)
 		if err != nil {
 			log.Fatal("contract.DeployStore:", err)
 		}
@@ -146,9 +146,9 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal("contract.NewStore:", err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		multihash, err := GetMultiHashFromIPFSHash(cid)
@@ -198,9 +198,9 @@ func main() {
 		}
 
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal("contract.NewStore:", err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		var item struct {
@@ -296,9 +296,9 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal("contract.NewStore", err)
+			log.Fatal("contract.NewBirrContract", err)
 		}
 
 		var tx *types.Transaction
@@ -353,9 +353,9 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal("contract.NewStore:", err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		tx, err := instance.Kill(auth)

@@ -17,7 +17,7 @@ import (
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/joho/godotenv"
 
-	"github.com/skjune12/eth-ipfs/contract"
+	"github.com/skjune12/birr/evaluation/contract"
 )
 
 // GasLimit specify the GasLimit. in Ropsten, it is defined as 4712388
@@ -45,7 +45,7 @@ func main() {
 	sh := shell.NewShell("localhost:5001")
 	client, err := ethclient.Dial("http://localhost:8545")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("ethclient.Dial:", err)
 	}
 
 	switch os.Args[1] {
@@ -53,7 +53,7 @@ func main() {
 	case "deploy":
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY"))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
@@ -65,12 +65,12 @@ func main() {
 		fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -80,15 +80,15 @@ func main() {
 		auth.GasPrice = gasPrice
 
 		input := "1.0"
-		address, tx, _, err := contract.DeployStore(auth, client, input)
+		address, tx, _, err := contract.DeployBirrContract(auth, client, input)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.DeployStore:", err)
 		}
 
 		fmt.Println("Contract", address.Hex())
 		fmt.Println("Transaction", tx.Hash().Hex())
 
-		// Add content to IPFS and write the IPFS hash to Smart Contract
+	// Add content to IPFS and write the IPFS hash to Smart Contract
 	case "add":
 		// Add to IPFS
 		if len(os.Args) < 5 {
@@ -102,13 +102,13 @@ func main() {
 
 		data, err := ReadFile(filename)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("ReadFile:", err)
 		}
 
 		cid, err := sh.Add(bytes.NewReader(data))
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "err")
+			log.Fatal("sh.Add:", err)
 		}
 
 		log.Println("IPFS Hash", cid)
@@ -116,25 +116,25 @@ func main() {
 		// Add to Ethereum
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
 		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 		if !ok {
-			log.Fatal("error casting public ket to ECDSA")
+			log.Fatal("error casting public key to ECDSA")
 		}
 
 		fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -146,14 +146,14 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		multihash, err := GetMultiHashFromIPFSHash(cid)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("GetMultiHashFromIPFSHash:", err)
 		}
 
 		var tx *types.Transaction
@@ -161,12 +161,16 @@ func main() {
 		switch objectType {
 		case "route":
 			tx, err = instance.SetRoute(auth, key, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "route6":
-			tx, err = instance.SetRoute6(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+			tx, err = instance.SetRoute6(auth, key, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "aut-num":
 			tx, err = instance.SetAutNum(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "as-set":
 			tx, err = instance.SetAsSet(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
@@ -198,9 +202,9 @@ func main() {
 		}
 
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		var item struct {
@@ -212,29 +216,42 @@ func main() {
 		switch objectType {
 		case "route":
 			item, err = instance.GetRoute(nil, common.HexToAddress(accountAddr), key)
+
 		case "routelist":
 			// NOTE: does not work but works fine in remix
 			keys, err := instance.GetRouteKeys(nil)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("contract.GetRouteKeys", err)
 			}
 
 			fmt.Printf("%#v", keys)
 			return
 
 		case "route6":
-			item, err = instance.GetRoute6(nil, common.HexToAddress(accountAddr))
+			item, err = instance.GetRoute6(nil, common.HexToAddress(accountAddr), key)
+
+		case "route6list":
+			keys, err := instance.GetRoute6Keys(nil)
+			if err != nil {
+				log.Fatal("contract.GetRoute6Keys", err)
+			}
+
+			fmt.Printf("%#v", keys)
+			return
+
 		case "aut-num":
 			item, err = instance.GetAutNum(nil, common.HexToAddress(accountAddr))
+
 		case "as-set":
 			item, err = instance.GetAsSet(nil, common.HexToAddress(accountAddr))
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
 		}
 
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("instance.Get", err)
 		}
 
 		multihash := &MultiHash{}
@@ -248,7 +265,7 @@ func main() {
 
 		obj, err := sh.ObjectGet(ipfsHash)
 		if err != nil {
-			log.Println(err)
+			log.Println("sh.ObjectGet:", err)
 		}
 
 		fmt.Printf(obj.Data)
@@ -266,7 +283,7 @@ func main() {
 		// Exec contract
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
@@ -279,12 +296,12 @@ func main() {
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -296,9 +313,9 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewBirrContract", err)
 		}
 
 		var tx *types.Transaction
@@ -306,8 +323,10 @@ func main() {
 		switch objectType {
 		case "route":
 			tx, err = instance.RemoveRoute(auth, key)
+
 		case "route6":
-			fmt.Fprintf(os.Stderr, "Not implemented\n")
+			tx, err = instance.RemoveRoute6(auth, key)
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
@@ -336,12 +355,12 @@ func main() {
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -353,15 +372,15 @@ func main() {
 
 		// contract address (string)
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
-		instance, err := contract.NewStore(address, client)
+		instance, err := contract.NewBirrContract(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewBirrContract:", err)
 		}
 
 		tx, err := instance.Kill(auth)
 
 		if err != nil {
-			log.Fatal("instance.SetObject", err)
+			log.Fatal("instance.SetObject:", err)
 		}
 
 		fmt.Printf("tx sent: %s\n", tx.Hash().Hex())

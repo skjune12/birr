@@ -1,6 +1,6 @@
 pragma solidity ^0.5.1;
 
-contract Store {
+contract BirrContract {
   address payable public owner;
   string public version;
 
@@ -12,8 +12,6 @@ contract Store {
 
   struct Object {
     uint32 asNumber;
-    MultiHash route;
-    MultiHash route6;
     MultiHash autNum;
     MultiHash asSet;
 
@@ -21,6 +19,11 @@ contract Store {
     mapping(bytes32 => MultiHash) routes;
     mapping(bytes32 => bool) existRouteKeys;
     bytes32[] routeKeys;
+
+    // for managing route6 objects
+    mapping(bytes32 => MultiHash) route6s;
+    mapping(bytes32 => bool) existRoute6Keys;
+    bytes32[] route6Keys;
   }
 
   // mapping (address => MultiHash) public items;
@@ -38,7 +41,7 @@ contract Store {
     owner = msg.sender;
   }
 
-  function find(address addr, bytes32 key) private view returns(uint i) {
+  function findRoute(address addr, bytes32 key) private view returns(uint i) {
     i = 0;
     while (objects[addr].routeKeys[i] != key) {
       i++;
@@ -46,11 +49,23 @@ contract Store {
     return i;
   }
 
-  function contains(address addr, bytes32 key) private view returns (bool) {
+  function findRoute6(address addr, bytes32 key) private view returns(uint i) {
+    i = 0;
+    while (objects[addr].route6Keys[i] != key) {
+      i++;
+    }
+    return i;
+  }
+
+  function containsRoute(address addr, bytes32 key) private view returns (bool) {
     return objects[addr].existRouteKeys[key];
   }
 
-  function removeByIndex(address addr, uint i) private {
+  function containsRoute6(address addr, bytes32 key) private view returns (bool) {
+    return objects[addr].existRoute6Keys[key];
+  }
+
+  function removeRouteByIndex(address addr, uint i) private {
     while (i < objects[addr].routeKeys.length-1) {
       objects[addr].routeKeys[i] = objects[addr].routeKeys[i+1];
       i++;
@@ -59,18 +74,37 @@ contract Store {
     objects[addr].routeKeys.length--;
   }
 
-  function removeByKey(address addr, bytes32 key) private {
-    uint i = find(addr, key);
-    removeByIndex(addr, i);
+  function removeRoute6ByIndex(address addr, uint i) private {
+    while (i < objects[addr].route6Keys.length-1) {
+      objects[addr].route6Keys[i] = objects[addr].route6Keys[i+1];
+      i++;
+    }
+
+    objects[addr].route6Keys.length--;
+  }
+
+  function removeRouteByKey(address addr, bytes32 key) private {
+    uint i = findRoute(addr, key);
+    removeRouteByIndex(addr, i);
     delete objects[addr].routes[key];
     delete objects[addr].existRouteKeys[key];
   }
 
-  function removeRoute(bytes32 key) public {
-    removeByKey(msg.sender, key);
+  function removeRoute6ByKey(address addr, bytes32 key) private {
+    uint i = findRoute6(addr, key);
+    removeRoute6ByIndex(addr, i);
+    delete objects[addr].route6s[key];
+    delete objects[addr].existRoute6Keys[key];
   }
 
-  // under delelopping
+  function removeRoute(bytes32 key) public {
+    removeRouteByKey(msg.sender, key);
+  }
+
+  function removeRoute6(bytes32 key) public {
+    removeRoute6ByKey(msg.sender, key);
+  }
+
   function setRoute(bytes32 key, bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
     MultiHash memory item = MultiHash(_digest, _hashFunction, _size);
     objects[msg.sender].routes[key] = item;
@@ -79,9 +113,11 @@ contract Store {
     emit ItemSet(msg.sender, _digest, _hashFunction, _size);
   }
 
-  function setRoute6(bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
+  function setRoute6(bytes32 key, bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
     MultiHash memory item = MultiHash(_digest, _hashFunction, _size);
-    objects[msg.sender].route6 = item;
+    objects[msg.sender].route6s[key] = item;
+    objects[msg.sender].route6Keys.push(key);
+    objects[msg.sender].existRoute6Keys[key] = true;
     emit ItemSet(msg.sender, _digest, _hashFunction, _size);
   }
 
@@ -110,9 +146,17 @@ contract Store {
     return objects[msg.sender].existRouteKeys[key];
   }
 
-  function getRoute6(address addr) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {
-    MultiHash memory item = objects[addr].route6;
+  function getRoute6(address addr, bytes32 key) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {
+    MultiHash memory item = objects[addr].route6s[key];
     return (item.digest, item.hashFunction, item.size);
+  }
+
+  function getRoute6Keys() public view returns(bytes32[] memory) {
+    return objects[msg.sender].route6Keys;
+  }
+
+  function existsRoute6Key(bytes32 key) public view returns(bool) {
+    return objects[msg.sender].existRoute6Keys[key];
   }
 
   function getAutNum(address addr) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {

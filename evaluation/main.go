@@ -17,7 +17,7 @@ import (
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/joho/godotenv"
 
-	"github.com/skjune12/eth-ipfs/contract"
+	"github.com/skjune12/birr/evaluation/contract"
 )
 
 // GasLimit specify the GasLimit. in Ropsten, it is defined as 4712388
@@ -45,7 +45,7 @@ func main() {
 	sh := shell.NewShell("localhost:5001")
 	client, err := ethclient.Dial("http://localhost:8545")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("ethclient.Dial:", err)
 	}
 
 	switch os.Args[1] {
@@ -53,7 +53,7 @@ func main() {
 	case "deploy":
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY"))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
@@ -65,12 +65,12 @@ func main() {
 		fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -82,13 +82,13 @@ func main() {
 		input := "1.0"
 		address, tx, _, err := contract.DeployStore(auth, client, input)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.DeployStore:", err)
 		}
 
 		fmt.Println("Contract", address.Hex())
 		fmt.Println("Transaction", tx.Hash().Hex())
 
-		// Add content to IPFS and write the IPFS hash to Smart Contract
+	// Add content to IPFS and write the IPFS hash to Smart Contract
 	case "add":
 		// Add to IPFS
 		if len(os.Args) < 5 {
@@ -102,13 +102,13 @@ func main() {
 
 		data, err := ReadFile(filename)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("ReadFile:", err)
 		}
 
 		cid, err := sh.Add(bytes.NewReader(data))
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "err")
+			log.Fatal("sh.Add:", err)
 		}
 
 		log.Println("IPFS Hash", cid)
@@ -116,25 +116,25 @@ func main() {
 		// Add to Ethereum
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
 		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 		if !ok {
-			log.Fatal("error casting public ket to ECDSA")
+			log.Fatal("error casting public key to ECDSA")
 		}
 
 		fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -148,12 +148,12 @@ func main() {
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
 		instance, err := contract.NewStore(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewStore:", err)
 		}
 
 		multihash, err := GetMultiHashFromIPFSHash(cid)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("GetMultiHashFromIPFSHash:", err)
 		}
 
 		var tx *types.Transaction
@@ -200,7 +200,7 @@ func main() {
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
 		instance, err := contract.NewStore(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewStore:", err)
 		}
 
 		var item struct {
@@ -216,7 +216,7 @@ func main() {
 			// NOTE: does not work but works fine in remix
 			keys, err := instance.GetRouteKeys(nil)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("contract.GetRouteKeys", err)
 			}
 
 			fmt.Printf("%#v", keys)
@@ -234,7 +234,7 @@ func main() {
 		}
 
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("instance.Get", err)
 		}
 
 		multihash := &MultiHash{}
@@ -248,7 +248,7 @@ func main() {
 
 		obj, err := sh.ObjectGet(ipfsHash)
 		if err != nil {
-			log.Println(err)
+			log.Println("sh.ObjectGet:", err)
 		}
 
 		fmt.Printf(obj.Data)
@@ -266,7 +266,7 @@ func main() {
 		// Exec contract
 		privateKey, err := crypto.HexToECDSA(os.Getenv("ETH_SECRET_KEY")) // pass the string
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("crypto.HexToECDSA:", err)
 		}
 
 		publicKey := privateKey.Public()
@@ -279,12 +279,12 @@ func main() {
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -298,7 +298,7 @@ func main() {
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
 		instance, err := contract.NewStore(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewStore", err)
 		}
 
 		var tx *types.Transaction
@@ -336,12 +336,12 @@ func main() {
 
 		nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.PendingNonceAt:", err)
 		}
 
 		gasPrice, err := client.SuggestGasPrice(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("client.SuggestGasPrice:", err)
 		}
 
 		auth := bind.NewKeyedTransactor(privateKey)
@@ -355,13 +355,13 @@ func main() {
 		address := common.HexToAddress(os.Getenv("CONTRACT_ADDR"))
 		instance, err := contract.NewStore(address, client)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("contract.NewStore:", err)
 		}
 
 		tx, err := instance.Kill(auth)
 
 		if err != nil {
-			log.Fatal("instance.SetObject", err)
+			log.Fatal("instance.SetObject:", err)
 		}
 
 		fmt.Printf("tx sent: %s\n", tx.Hash().Hex())

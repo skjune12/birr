@@ -28,10 +28,10 @@ var (
 )
 
 // BirrContractABI is the input ABI used to generate the binding from.
-const BirrContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getAutNum\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"getRoute\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setAutNum\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"kill\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setRoute6\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"removeRoute\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"existsRouteKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getAsSet\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"},{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setRoute\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getRouteKeys\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setAsSet\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getRoute6\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"_version\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"key\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"digest\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"size\",\"type\":\"uint8\"}],\"name\":\"ItemSet\",\"type\":\"event\"}]"
+const BirrContractABI = "[{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getAutNum\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"getRoute\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setAutNum\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"removeRoute6\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"kill\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"removeRoute\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"existsRouteKey\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"version\",\"outputs\":[{\"name\":\"\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"},{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setRoute6\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"}],\"name\":\"getAsSet\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"existsRoute6Key\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"key\",\"type\":\"bytes32\"},{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setRoute\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getRouteKeys\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getRoute6Keys\",\"outputs\":[{\"name\":\"\",\"type\":\"bytes32[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_digest\",\"type\":\"bytes32\"},{\"name\":\"_hashFunction\",\"type\":\"uint8\"},{\"name\":\"_size\",\"type\":\"uint8\"}],\"name\":\"setAsSet\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"addr\",\"type\":\"address\"},{\"name\":\"key\",\"type\":\"bytes32\"}],\"name\":\"getRoute6\",\"outputs\":[{\"name\":\"digest\",\"type\":\"bytes32\"},{\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"name\":\"size\",\"type\":\"uint8\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"name\":\"_version\",\"type\":\"string\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"key\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"digest\",\"type\":\"bytes32\"},{\"indexed\":false,\"name\":\"hashFunction\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"size\",\"type\":\"uint8\"}],\"name\":\"ItemSet\",\"type\":\"event\"}]"
 
 // BirrContractBin is the compiled bytecode used for deploying new contracts.
-const BirrContractBin = `0x608060405234801561001057600080fd5b50604051610cfd380380610cfd8339810180604052602081101561003357600080fd5b81019080805164010000000081111561004b57600080fd5b8201602081018481111561005e57600080fd5b815164010000000081118282018710171561007857600080fd5b5050805190935061009292506001915060208401906100ab565b505060008054600160a060020a03191633179055610146565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106100ec57805160ff1916838001178555610119565b82800160010185558215610119579182015b828111156101195782518255916020019190600101906100fe565b50610125929150610129565b5090565b61014391905b80821115610125576000815560010161012f565b90565b610ba8806101556000396000f3fe608060405234801561001057600080fd5b5060043610610107576000357c01000000000000000000000000000000000000000000000000000000009004806354fd4d50116100a95780638da5cb5b116100835780638da5cb5b1461030b578063a15b18671461032f578063bbc9a14f14610387578063c8b80895146103b557610107565b806354fd4d50146102345780636c28e70c146102b15780638819bb56146102d757610107565b806341c0e1b5116100e557806341c0e1b5146101b057806347fb6379146101b85780634d0fdcae146101e65780635129efce1461020357610107565b8063084fa7021461010c5780630b014d84146101545780631079975514610180575b600080fd5b6101326004803603602081101561012257600080fd5b5035600160a060020a03166103db565b6040805193845260ff9283166020850152911682820152519081900360600190f35b6101326004803603604081101561016a57600080fd5b50600160a060020a03813516906020013561043a565b6101ae6004803603606081101561019657600080fd5b5080359060ff602082013581169160400135166104a5565b005b6101ae61054b565b6101ae600480360360608110156101ce57600080fd5b5080359060ff60208201358116916040013516610570565b6101ae600480360360208110156101fc57600080fd5b5035610615565b6102206004803603602081101561021957600080fd5b5035610622565b604080519115158252519081900360200190f35b61023c610646565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561027657818101518382015260200161025e565b50505050905090810190601f1680156102a35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b610132600480360360208110156102c757600080fd5b5035600160a060020a03166106d3565b6101ae600480360360808110156102ed57600080fd5b5080359060208101359060ff60408201358116916060013516610732565b61031361080e565b60408051600160a060020a039092168252519081900360200190f35b61033761081d565b60408051602080825283518183015283519192839290830191858101910280838360005b8381101561037357818101518382015260200161035b565b505050509050019250505060405180910390f35b6101ae6004803603606081101561039d57600080fd5b5080359060ff60208201358116916040013516610882565b610132600480360360208110156103cb57600080fd5b5035600160a060020a0316610928565b60008060006103e8610aff565b50505050600160a060020a03166000908152600260209081526040918290208251606081018452600382015480825260049092015460ff80821694830185905261010090910416930183905292909190565b6000806000610447610aff565b505050600160a060020a03831660009081526002602090815260408083208584526007018252918290208251606081018452815480825260019092015460ff8082169483018590526101009091041693018390529250909250925092565b6104ad610aff565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a902089516003820155935160049094018054925188166101000261ff00199590981660ff1990931692909217939093169590951790945586518a815291820192909252808601929092529351929392600080516020610b5d833981519152929181900390910190a250505050565b600054600160a060020a0316331461056257600080fd5b600054600160a060020a0316ff5b610578610aff565b50604080516060818101835285825260ff80861660208085018281528784168688018181523360008181526002808752908b90208a516001820155945194018054925188166101000261ff00199590981660ff1990931692909217939093169590951790945586518a815291820192909252808601929092529351929392600080516020610b5d833981519152929181900390910190a250505050565b61061f3382610986565b50565b33600090815260026020908152604080832093835260089093019052205460ff1690565b60018054604080516020600284861615610100026000190190941693909304601f810184900484028201840190925281815292918301828280156106cb5780601f106106a0576101008083540402835291602001916106cb565b820191906000526020600020905b8154815290600101906020018083116106ae57829003601f168201915b505050505081565b60008060006106e0610aff565b50505050600160a060020a03166000908152600260209081526040918290208251606081018452600582015480825260069092015460ff80821694830185905261010090910416930183905292909190565b61073a610aff565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a81208f82526007810187528b82208b51815595516001968701805495518b166101000261ff001992909b1660ff199687161791909116999099179098556009880180548087018255908252868220018f90558e81526008909701855295899020805490911690921790915586518a81529182019290925280860191909152935192939092600080516020610b5d833981519152929181900390910190a25050505050565b600054600160a060020a031681565b3360009081526002602090815260409182902060090180548351818402810184019094528084526060939283018282801561087757602002820191906000526020600020905b815481526020019060010190808311610863575b505050505090505b90565b61088a610aff565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a902089516005820155935160069094018054925188166101000261ff00199590981660ff1990931692909217939093169590951790945586518a815291820192909252808601929092529351929392600080516020610b5d833981519152929181900390910190a250505050565b6000806000610935610aff565b50505050600160a060020a031660009081526002602081815260409283902083516060810185526001820154808252919093015460ff80821693850184905261010090910416929093018290529192565b600061099283836109e9565b905061099e8382610a36565b50600160a060020a03919091166000908152600260209081526040808320938352600784018252808320838155600101805461ffff191690556008909301905220805460ff19169055565b60005b600160a060020a0383166000908152600260205260409020600901805483919083908110610a1657fe5b9060005260206000200154141515610a30576001016109ec565b92915050565b600160a060020a03821660009081526002602052604090206009015460001901811015610ace57600160a060020a0382166000908152600260205260409020600901805460018301908110610a8757fe5b6000918252602080832090910154600160a060020a038516835260029091526040909120600901805483908110610aba57fe5b600091825260209091200155600101610a36565b600160a060020a0382166000908152600260205260409020600901805490610afa906000198301610b1f565b505050565b604080516060810182526000808252602082018190529181019190915290565b815481835581811115610afa57600083815260209020610afa91810190830161087f91905b80821115610b585760008155600101610b44565b509056fe7abc65a09f41055eede1f559e9c49c9b294484af9110a5fde063cc2ff243be2da165627a7a7230582063e298dcf552388116cf4bba979e7539c4972f43d0a3957a20eda6a03d87ea860029`
+const BirrContractBin = `0x60806040523480156200001157600080fd5b5060405162000fc138038062000fc1833981018060405260208110156200003757600080fd5b8101908080516401000000008111156200005057600080fd5b820160208101848111156200006457600080fd5b81516401000000008111828201871017156200007f57600080fd5b505080519093506200009b9250600191506020840190620000b5565b505060008054600160a060020a031916331790556200015a565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10620000f857805160ff191683800117855562000128565b8280016001018555821562000128579182015b82811115620001285782518255916020019190600101906200010b565b50620001369291506200013a565b5090565b6200015791905b8082111562000136576000815560010162000141565b90565b610e57806200016a6000396000f3fe608060405234801561001057600080fd5b5060043610610128576000357c0100000000000000000000000000000000000000000000000000000000900480636b98c1a0116100bf5780638da5cb5b1161008e5780638da5cb5b1461036c578063a15b186714610390578063b61c812c146103e8578063bbc9a14f146103f0578063d5d496e91461041e57610128565b80636b98c1a0146102c15780636c28e70c146102f5578063783e6b7a1461031b5780638819bb561461033857610128565b806341c0e1b5116100fb57806341c0e1b5146101ee5780634d0fdcae146101f65780635129efce1461021357806354fd4d501461024457610128565b8063084fa7021461012d5780630b014d841461017557806310799755146101a15780631d8700a1146101d1575b600080fd5b6101536004803603602081101561014357600080fd5b5035600160a060020a031661044a565b6040805193845260ff9283166020850152911682820152519081900360600190f35b6101536004803603604081101561018b57600080fd5b50600160a060020a0381351690602001356104a8565b6101cf600480360360608110156101b757600080fd5b5080359060ff60208201358116916040013516610513565b005b6101cf600480360360208110156101e757600080fd5b50356105b8565b6101cf6105c5565b6101cf6004803603602081101561020c57600080fd5b50356105ea565b6102306004803603602081101561022957600080fd5b50356105f4565b604080519115158252519081900360200190f35b61024c610618565b6040805160208082528351818301528351919283929083019185019080838360005b8381101561028657818101518382015260200161026e565b50505050905090810190601f1680156102b35780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6101cf600480360360808110156102d757600080fd5b5080359060208101359060ff604082013581169160600135166106a5565b6101536004803603602081101561030b57600080fd5b5035600160a060020a0316610781565b6102306004803603602081101561033157600080fd5b50356107e0565b6101cf6004803603608081101561034e57600080fd5b5080359060208101359060ff60408201358116916060013516610804565b6103746108e0565b60408051600160a060020a039092168252519081900360200190f35b6103986108ef565b60408051602080825283518183015283519192839290830191858101910280838360005b838110156103d45781810151838201526020016103bc565b505050509050019250505060405180910390f35b610398610954565b6101cf6004803603606081101561040657600080fd5b5080359060ff602082013581169160400135166109b6565b6101536004803603604081101561043457600080fd5b50600160a060020a038135169060200135610a5c565b6000806000610457610dae565b50505050600160a060020a031660009081526002602081815260409283902083516060810185526001820154808252919093015460ff80821693850184905261010090910416929093018290529192565b60008060006104b5610dae565b505050600160a060020a03831660009081526002602090815260408083208584526005018252918290208251606081018452815480825260019092015460ff8082169483018590526101009091041693018390529250909250925092565b61051b610dae565b50604080516060818101835285825260ff80861660208085018281528784168688018181523360008181526002808752908b90208a516001820155945194018054925188166101000261ff00199590981660ff1990931692909217939093169590951790945586518a815291820192909252808601929092529351929392600080516020610e0c833981519152929181900390910190a250505050565b6105c23382610ac7565b50565b600054600160a060020a031633146105dc57600080fd5b600054600160a060020a0316ff5b6105c23382610b2a565b33600090815260026020908152604080832093835260069093019052205460ff1690565b60018054604080516020600284861615610100026000190190941693909304601f8101849004840282018401909252818152929183018282801561069d5780601f106106725761010080835404028352916020019161069d565b820191906000526020600020905b81548152906001019060200180831161068057829003601f168201915b505050505081565b6106ad610dae565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a81208f82526008810187528b82208b51815595516001968701805495518b166101000261ff001992909b1660ff19968716179190911699909917909855600a880180548087018255908252868220018f90558e81526009909701855295899020805490911690921790915586518a81529182019290925280860191909152935192939092600080516020610e0c833981519152929181900390910190a25050505050565b600080600061078e610dae565b50505050600160a060020a03166000908152600260209081526040918290208251606081018452600382015480825260049092015460ff80821694830185905261010090910416930183905292909190565b33600090815260026020908152604080832093835260099093019052205460ff1690565b61080c610dae565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a81208f82526005810187528b82208b51815595516001968701805495518b166101000261ff001992909b1660ff199687161791909116999099179098556007880180548087018255908252868220018f90558e81526006909701855295899020805490911690921790915586518a81529182019290925280860191909152935192939092600080516020610e0c833981519152929181900390910190a25050505050565b600054600160a060020a031681565b3360009081526002602090815260409182902060070180548351818402810184019094528084526060939283018282801561094957602002820191906000526020600020905b815481526020019060010190808311610935575b505050505090505b90565b33600090815260026020908152604091829020600a018054835181840281018401909452808452606093928301828280156109495760200282019190600052602060002090815481526020019060010190808311610935575050505050905090565b6109be610dae565b50604080516060818101835285825260ff8086166020808501828152878416868801818152336000818152600286528a902089516003820155935160049094018054925188166101000261ff00199590981660ff1990931692909217939093169590951790945586518a815291820192909252808601929092529351929392600080516020610e0c833981519152929181900390910190a250505050565b6000806000610a69610dae565b505050600160a060020a03831660009081526002602090815260408083208584526008018252918290208251606081018452815480825260019092015460ff8082169483018590526101009091041693018390529250909250925092565b6000610ad38383610b8d565b9050610adf8382610bda565b50600160a060020a03919091166000908152600260209081526040808320938352600884018252808320838155600101805461ffff191690556009909301905220805460ff19169055565b6000610b368383610ca3565b9050610b428382610cea565b50600160a060020a03919091166000908152600260209081526040808320938352600584018252808320838155600101805461ffff191690556006909301905220805460ff19169055565b60005b600160a060020a0383166000908152600260205260409020600a01805483919083908110610bba57fe5b9060005260206000200154141515610bd457600101610b90565b92915050565b600160a060020a0382166000908152600260205260409020600a015460001901811015610c7257600160a060020a0382166000908152600260205260409020600a01805460018301908110610c2b57fe5b6000918252602080832090910154600160a060020a038516835260029091526040909120600a01805483908110610c5e57fe5b600091825260209091200155600101610bda565b600160a060020a0382166000908152600260205260409020600a01805490610c9e906000198301610dce565b505050565b60005b600160a060020a0383166000908152600260205260409020600701805483919083908110610cd057fe5b9060005260206000200154141515610bd457600101610ca6565b600160a060020a03821660009081526002602052604090206007015460001901811015610d8257600160a060020a0382166000908152600260205260409020600701805460018301908110610d3b57fe5b6000918252602080832090910154600160a060020a038516835260029091526040909120600701805483908110610d6e57fe5b600091825260209091200155600101610cea565b600160a060020a0382166000908152600260205260409020600701805490610c9e906000198301610dce565b604080516060810182526000808252602082018190529181019190915290565b815481835581811115610c9e57600083815260209020610c9e91810190830161095191905b80821115610e075760008155600101610df3565b509056fe7abc65a09f41055eede1f559e9c49c9b294484af9110a5fde063cc2ff243be2da165627a7a7230582087f67f81118f98d3e41232fdaaf9a10d5070d56ea004a758499b6193d1653fb30029`
 
 // DeployBirrContract deploys a new Ethereum contract, binding an instance of BirrContract to it.
 func DeployBirrContract(auth *bind.TransactOpts, backend bind.ContractBackend, _version string) (common.Address, *types.Transaction, *BirrContract, error) {
@@ -188,6 +188,32 @@ func (_BirrContract *BirrContractTransactorRaw) Transact(opts *bind.TransactOpts
 	return _BirrContract.Contract.contract.Transact(opts, method, params...)
 }
 
+// ExistsRoute6Key is a free data retrieval call binding the contract method 0x783e6b7a.
+//
+// Solidity: function existsRoute6Key(key bytes32) constant returns(bool)
+func (_BirrContract *BirrContractCaller) ExistsRoute6Key(opts *bind.CallOpts, key [32]byte) (bool, error) {
+	var (
+		ret0 = new(bool)
+	)
+	out := ret0
+	err := _BirrContract.contract.Call(opts, out, "existsRoute6Key", key)
+	return *ret0, err
+}
+
+// ExistsRoute6Key is a free data retrieval call binding the contract method 0x783e6b7a.
+//
+// Solidity: function existsRoute6Key(key bytes32) constant returns(bool)
+func (_BirrContract *BirrContractSession) ExistsRoute6Key(key [32]byte) (bool, error) {
+	return _BirrContract.Contract.ExistsRoute6Key(&_BirrContract.CallOpts, key)
+}
+
+// ExistsRoute6Key is a free data retrieval call binding the contract method 0x783e6b7a.
+//
+// Solidity: function existsRoute6Key(key bytes32) constant returns(bool)
+func (_BirrContract *BirrContractCallerSession) ExistsRoute6Key(key [32]byte) (bool, error) {
+	return _BirrContract.Contract.ExistsRoute6Key(&_BirrContract.CallOpts, key)
+}
+
 // ExistsRouteKey is a free data retrieval call binding the contract method 0x5129efce.
 //
 // Solidity: function existsRouteKey(key bytes32) constant returns(bool)
@@ -334,10 +360,10 @@ func (_BirrContract *BirrContractCallerSession) GetRoute(addr common.Address, ke
 	return _BirrContract.Contract.GetRoute(&_BirrContract.CallOpts, addr, key)
 }
 
-// GetRoute6 is a free data retrieval call binding the contract method 0xc8b80895.
+// GetRoute6 is a free data retrieval call binding the contract method 0xd5d496e9.
 //
-// Solidity: function getRoute6(addr address) constant returns(digest bytes32, hashFunction uint8, size uint8)
-func (_BirrContract *BirrContractCaller) GetRoute6(opts *bind.CallOpts, addr common.Address) (struct {
+// Solidity: function getRoute6(addr address, key bytes32) constant returns(digest bytes32, hashFunction uint8, size uint8)
+func (_BirrContract *BirrContractCaller) GetRoute6(opts *bind.CallOpts, addr common.Address, key [32]byte) (struct {
 	Digest       [32]byte
 	HashFunction uint8
 	Size         uint8
@@ -348,30 +374,56 @@ func (_BirrContract *BirrContractCaller) GetRoute6(opts *bind.CallOpts, addr com
 		Size         uint8
 	})
 	out := ret
-	err := _BirrContract.contract.Call(opts, out, "getRoute6", addr)
+	err := _BirrContract.contract.Call(opts, out, "getRoute6", addr, key)
 	return *ret, err
 }
 
-// GetRoute6 is a free data retrieval call binding the contract method 0xc8b80895.
+// GetRoute6 is a free data retrieval call binding the contract method 0xd5d496e9.
 //
-// Solidity: function getRoute6(addr address) constant returns(digest bytes32, hashFunction uint8, size uint8)
-func (_BirrContract *BirrContractSession) GetRoute6(addr common.Address) (struct {
+// Solidity: function getRoute6(addr address, key bytes32) constant returns(digest bytes32, hashFunction uint8, size uint8)
+func (_BirrContract *BirrContractSession) GetRoute6(addr common.Address, key [32]byte) (struct {
 	Digest       [32]byte
 	HashFunction uint8
 	Size         uint8
 }, error) {
-	return _BirrContract.Contract.GetRoute6(&_BirrContract.CallOpts, addr)
+	return _BirrContract.Contract.GetRoute6(&_BirrContract.CallOpts, addr, key)
 }
 
-// GetRoute6 is a free data retrieval call binding the contract method 0xc8b80895.
+// GetRoute6 is a free data retrieval call binding the contract method 0xd5d496e9.
 //
-// Solidity: function getRoute6(addr address) constant returns(digest bytes32, hashFunction uint8, size uint8)
-func (_BirrContract *BirrContractCallerSession) GetRoute6(addr common.Address) (struct {
+// Solidity: function getRoute6(addr address, key bytes32) constant returns(digest bytes32, hashFunction uint8, size uint8)
+func (_BirrContract *BirrContractCallerSession) GetRoute6(addr common.Address, key [32]byte) (struct {
 	Digest       [32]byte
 	HashFunction uint8
 	Size         uint8
 }, error) {
-	return _BirrContract.Contract.GetRoute6(&_BirrContract.CallOpts, addr)
+	return _BirrContract.Contract.GetRoute6(&_BirrContract.CallOpts, addr, key)
+}
+
+// GetRoute6Keys is a free data retrieval call binding the contract method 0xb61c812c.
+//
+// Solidity: function getRoute6Keys() constant returns(bytes32[])
+func (_BirrContract *BirrContractCaller) GetRoute6Keys(opts *bind.CallOpts) ([][32]byte, error) {
+	var (
+		ret0 = new([][32]byte)
+	)
+	out := ret0
+	err := _BirrContract.contract.Call(opts, out, "getRoute6Keys")
+	return *ret0, err
+}
+
+// GetRoute6Keys is a free data retrieval call binding the contract method 0xb61c812c.
+//
+// Solidity: function getRoute6Keys() constant returns(bytes32[])
+func (_BirrContract *BirrContractSession) GetRoute6Keys() ([][32]byte, error) {
+	return _BirrContract.Contract.GetRoute6Keys(&_BirrContract.CallOpts)
+}
+
+// GetRoute6Keys is a free data retrieval call binding the contract method 0xb61c812c.
+//
+// Solidity: function getRoute6Keys() constant returns(bytes32[])
+func (_BirrContract *BirrContractCallerSession) GetRoute6Keys() ([][32]byte, error) {
+	return _BirrContract.Contract.GetRoute6Keys(&_BirrContract.CallOpts)
 }
 
 // GetRouteKeys is a free data retrieval call binding the contract method 0xa15b1867.
@@ -494,6 +546,27 @@ func (_BirrContract *BirrContractTransactorSession) RemoveRoute(key [32]byte) (*
 	return _BirrContract.Contract.RemoveRoute(&_BirrContract.TransactOpts, key)
 }
 
+// RemoveRoute6 is a paid mutator transaction binding the contract method 0x1d8700a1.
+//
+// Solidity: function removeRoute6(key bytes32) returns()
+func (_BirrContract *BirrContractTransactor) RemoveRoute6(opts *bind.TransactOpts, key [32]byte) (*types.Transaction, error) {
+	return _BirrContract.contract.Transact(opts, "removeRoute6", key)
+}
+
+// RemoveRoute6 is a paid mutator transaction binding the contract method 0x1d8700a1.
+//
+// Solidity: function removeRoute6(key bytes32) returns()
+func (_BirrContract *BirrContractSession) RemoveRoute6(key [32]byte) (*types.Transaction, error) {
+	return _BirrContract.Contract.RemoveRoute6(&_BirrContract.TransactOpts, key)
+}
+
+// RemoveRoute6 is a paid mutator transaction binding the contract method 0x1d8700a1.
+//
+// Solidity: function removeRoute6(key bytes32) returns()
+func (_BirrContract *BirrContractTransactorSession) RemoveRoute6(key [32]byte) (*types.Transaction, error) {
+	return _BirrContract.Contract.RemoveRoute6(&_BirrContract.TransactOpts, key)
+}
+
 // SetAsSet is a paid mutator transaction binding the contract method 0xbbc9a14f.
 //
 // Solidity: function setAsSet(_digest bytes32, _hashFunction uint8, _size uint8) returns()
@@ -557,25 +630,25 @@ func (_BirrContract *BirrContractTransactorSession) SetRoute(key [32]byte, _dige
 	return _BirrContract.Contract.SetRoute(&_BirrContract.TransactOpts, key, _digest, _hashFunction, _size)
 }
 
-// SetRoute6 is a paid mutator transaction binding the contract method 0x47fb6379.
+// SetRoute6 is a paid mutator transaction binding the contract method 0x6b98c1a0.
 //
-// Solidity: function setRoute6(_digest bytes32, _hashFunction uint8, _size uint8) returns()
-func (_BirrContract *BirrContractTransactor) SetRoute6(opts *bind.TransactOpts, _digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
-	return _BirrContract.contract.Transact(opts, "setRoute6", _digest, _hashFunction, _size)
+// Solidity: function setRoute6(key bytes32, _digest bytes32, _hashFunction uint8, _size uint8) returns()
+func (_BirrContract *BirrContractTransactor) SetRoute6(opts *bind.TransactOpts, key [32]byte, _digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
+	return _BirrContract.contract.Transact(opts, "setRoute6", key, _digest, _hashFunction, _size)
 }
 
-// SetRoute6 is a paid mutator transaction binding the contract method 0x47fb6379.
+// SetRoute6 is a paid mutator transaction binding the contract method 0x6b98c1a0.
 //
-// Solidity: function setRoute6(_digest bytes32, _hashFunction uint8, _size uint8) returns()
-func (_BirrContract *BirrContractSession) SetRoute6(_digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
-	return _BirrContract.Contract.SetRoute6(&_BirrContract.TransactOpts, _digest, _hashFunction, _size)
+// Solidity: function setRoute6(key bytes32, _digest bytes32, _hashFunction uint8, _size uint8) returns()
+func (_BirrContract *BirrContractSession) SetRoute6(key [32]byte, _digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
+	return _BirrContract.Contract.SetRoute6(&_BirrContract.TransactOpts, key, _digest, _hashFunction, _size)
 }
 
-// SetRoute6 is a paid mutator transaction binding the contract method 0x47fb6379.
+// SetRoute6 is a paid mutator transaction binding the contract method 0x6b98c1a0.
 //
-// Solidity: function setRoute6(_digest bytes32, _hashFunction uint8, _size uint8) returns()
-func (_BirrContract *BirrContractTransactorSession) SetRoute6(_digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
-	return _BirrContract.Contract.SetRoute6(&_BirrContract.TransactOpts, _digest, _hashFunction, _size)
+// Solidity: function setRoute6(key bytes32, _digest bytes32, _hashFunction uint8, _size uint8) returns()
+func (_BirrContract *BirrContractTransactorSession) SetRoute6(key [32]byte, _digest [32]byte, _hashFunction uint8, _size uint8) (*types.Transaction, error) {
+	return _BirrContract.Contract.SetRoute6(&_BirrContract.TransactOpts, key, _digest, _hashFunction, _size)
 }
 
 // BirrContractItemSetIterator is returned from FilterItemSet and is used to iterate over the raw logs and unpacked data for ItemSet events raised by the BirrContract contract.

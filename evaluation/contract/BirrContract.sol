@@ -12,8 +12,6 @@ contract BirrContract {
 
   struct Object {
     uint32 asNumber;
-    // MultiHash route;
-    MultiHash route6;
     MultiHash autNum;
     MultiHash asSet;
 
@@ -63,6 +61,10 @@ contract BirrContract {
     return objects[addr].existRouteKeys[key];
   }
 
+  function containsRoute6(address addr, bytes32 key) private view returns (bool) {
+    return objects[addr].existRoute6Keys[key];
+  }
+
   function removeRouteByIndex(address addr, uint i) private {
     while (i < objects[addr].routeKeys.length-1) {
       objects[addr].routeKeys[i] = objects[addr].routeKeys[i+1];
@@ -72,6 +74,15 @@ contract BirrContract {
     objects[addr].routeKeys.length--;
   }
 
+  function removeRoute6ByIndex(address addr, uint i) private {
+    while (i < objects[addr].route6Keys.length-1) {
+      objects[addr].route6Keys[i] = objects[addr].route6Keys[i+1];
+      i++;
+    }
+
+    objects[addr].route6Keys.length--;
+  }
+
   function removeRouteByKey(address addr, bytes32 key) private {
     uint i = findRoute(addr, key);
     removeRouteByIndex(addr, i);
@@ -79,8 +90,19 @@ contract BirrContract {
     delete objects[addr].existRouteKeys[key];
   }
 
+  function removeRoute6ByKey(address addr, bytes32 key) private {
+    uint i = findRoute6(addr, key);
+    removeRoute6ByIndex(addr, i);
+    delete objects[addr].route6s[key];
+    delete objects[addr].existRoute6Keys[key];
+  }
+
   function removeRoute(bytes32 key) public {
     removeRouteByKey(msg.sender, key);
+  }
+
+  function removeRoute6(bytes32 key) public {
+    removeRoute6ByKey(msg.sender, key);
   }
 
   function setRoute(bytes32 key, bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
@@ -91,9 +113,11 @@ contract BirrContract {
     emit ItemSet(msg.sender, _digest, _hashFunction, _size);
   }
 
-  function setRoute6(bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
+  function setRoute6(bytes32 key, bytes32 _digest, uint8 _hashFunction, uint8 _size) public {
     MultiHash memory item = MultiHash(_digest, _hashFunction, _size);
-    objects[msg.sender].route6 = item;
+    objects[msg.sender].route6s[key] = item;
+    objects[msg.sender].route6Keys.push(key);
+    objects[msg.sender].existRoute6Keys[key] = true;
     emit ItemSet(msg.sender, _digest, _hashFunction, _size);
   }
 
@@ -122,9 +146,17 @@ contract BirrContract {
     return objects[msg.sender].existRouteKeys[key];
   }
 
-  function getRoute6(address addr) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {
-    MultiHash memory item = objects[addr].route6;
+  function getRoute6(address addr, bytes32 key) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {
+    MultiHash memory item = objects[addr].route6s[key];
     return (item.digest, item.hashFunction, item.size);
+  }
+
+  function getRoute6Keys() public view returns(bytes32[] memory) {
+    return objects[msg.sender].route6Keys;
+  }
+
+  function existsRoute6Key(bytes32 key) public view returns(bool) {
+    return objects[msg.sender].existRoute6Keys[key];
   }
 
   function getAutNum(address addr) public view returns(bytes32 digest, uint8 hashFunction, uint8 size) {

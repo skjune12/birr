@@ -161,12 +161,16 @@ func main() {
 		switch objectType {
 		case "route":
 			tx, err = instance.SetRoute(auth, key, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "route6":
-			tx, err = instance.SetRoute6(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+			tx, err = instance.SetRoute6(auth, key, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "aut-num":
 			tx, err = instance.SetAutNum(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		case "as-set":
 			tx, err = instance.SetAsSet(auth, multihash.Digest, multihash.HashFunction, multihash.Size)
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
@@ -212,6 +216,7 @@ func main() {
 		switch objectType {
 		case "route":
 			item, err = instance.GetRoute(nil, common.HexToAddress(accountAddr), key)
+
 		case "routelist":
 			// NOTE: does not work but works fine in remix
 			keys, err := instance.GetRouteKeys(nil)
@@ -223,11 +228,23 @@ func main() {
 			return
 
 		case "route6":
-			item, err = instance.GetRoute6(nil, common.HexToAddress(accountAddr))
+			item, err = instance.GetRoute6(nil, common.HexToAddress(accountAddr), key)
+
+		case "route6list":
+			keys, err := instance.GetRoute6Keys(nil)
+			if err != nil {
+				log.Fatal("contract.GetRoute6Keys", err)
+			}
+
+			fmt.Printf("%#v", keys)
+			return
+
 		case "aut-num":
 			item, err = instance.GetAutNum(nil, common.HexToAddress(accountAddr))
+
 		case "as-set":
 			item, err = instance.GetAsSet(nil, common.HexToAddress(accountAddr))
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
@@ -306,8 +323,10 @@ func main() {
 		switch objectType {
 		case "route":
 			tx, err = instance.RemoveRoute(auth, key)
+
 		case "route6":
-			fmt.Fprintf(os.Stderr, "Not implemented\n")
+			tx, err = instance.RemoveRoute6(auth, key)
+
 		default:
 			fmt.Fprintf(os.Stderr, "object type '%s' does not support", objectType)
 			os.Exit(1)
